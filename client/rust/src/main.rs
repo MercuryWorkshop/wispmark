@@ -119,10 +119,13 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
             .into_io()
             .into_asyncrw();
         let value = tokio::spawn(async move {
+            let payload: String = "a".repeat(1024 * 50);
+            let payload_bytes = payload.as_bytes();
             loop {
-                let payload = "a".repeat(1024 * 50);
-                let payload_bytes = payload.as_bytes();            
-                let _ = channel.write_all(payload_bytes).await;
+                for _ in 0..256 {
+                    let _ = channel.write_all(payload_bytes).await;
+                }
+                channel.flush().await.expect("e");
             }
         });
         tasks.push(value);

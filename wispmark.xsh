@@ -19,7 +19,7 @@ $XONSH_SHOW_TRACEBACK = True
 wisp_port = 6001
 echo_port = 6002
 server_timeout = 5
-test_duration = 5
+test_duration = 10
 
 echo_dir = util.base_path / "echo"
 echo_repo = echo_dir / "tokio"
@@ -90,16 +90,17 @@ def main():
   cpu_names = re.findall(cpu_regex, p"/proc/cpuinfo".read_text())
   print(f"CPU: {cpu_names[0]} (x{len(cpu_names)})")
 
-  col_width = 0
-  for row in table:
-    widths = [len(cell) for cell in row]
-    col_width = max(col_width, max(widths))
+  col_widths = []
+  for x, col in enumerate(table[0]):
+    col_widths.append(0)
+    for y in range(len(table)):
+      col_widths[-1] = max(col_widths[-1], len(table[y][x]))
 
   rows = []
   for row in table:
-    cells = [cell.ljust(col_width) for cell in row]
+    cells = [cell.ljust(col_widths[x]) for x, cell in enumerate(row)]
     rows.append(" | ".join(cells))
-  seperator = "-+-".join(["-" * col_width] * len(table[0]))
+  seperator = "-+-".join(["-" * w for w in col_widths]) + "-"
   table_str = f"\n{seperator}\n".join(rows)
   print(table_str)
 

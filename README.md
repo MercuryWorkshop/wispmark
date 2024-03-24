@@ -16,22 +16,22 @@ You need:
 Then run ./wispmark.xsh to start the tests.
 
 ## Methodology:
-This program pairs each Wisp server with each Wisp client, with a TCP echo server running on port 6002. The amount of traffic passing through that port is used to calculate the bandwith that was achieved with each configuration.
+This program pairs each Wisp server with each Wisp client, with a TCP echo server running on port 6002. The amount of traffic passing through that port is used to calculate the bandwidth that was achieved with each configuration. 
 
 ## Current Results:
 ```
 CPU: AMD EPYC 7763 64-Core Processor (x4)
-                             | wisp-client-js (1)           | wisp-client-js (10)          | wisp-mux (1)                 | wisp-mux (10)               
------------------------------+------------------------------+------------------------------+------------------------------+-----------------------------
-wisp-server-node             | 77.7 MiB/s                   | 119.31 MiB/s                 | 107.57 MiB/s                 | 100.32 MiB/s                
------------------------------+------------------------------+------------------------------+------------------------------+-----------------------------
-wisp-server-python (python3) | 85.75 MiB/s                  | 109.35 MiB/s                 | 421.78 MiB/s                 | 593.71 MiB/s                
------------------------------+------------------------------+------------------------------+------------------------------+-----------------------------
-wisp-server-python (pypy3)   | 71.77 MiB/s                  | 104.56 MiB/s                 | 113.68 MiB/s                 | 85.6 MiB/s                  
------------------------------+------------------------------+------------------------------+------------------------------+-----------------------------
-epoxy-server                 | 75.53 MiB/s                  | 246.94 MiB/s                 | 432.37 MiB/s                 | 637.93 MiB/s                
------------------------------+------------------------------+------------------------------+------------------------------+-----------------------------
-WispServerCpp                | DNF                          | DNF                          | DNF                          | DNF                         
+                             | wisp-client-js (1) | wisp-client-js (10) | wisp-mux (1) | wisp-mux (10)
+-----------------------------+--------------------+---------------------+--------------+---------------
+wisp-server-node             | 78.26 MiB/s        | 105.03 MiB/s        | 116.31 MiB/s | 101.81 MiB/s 
+-----------------------------+--------------------+---------------------+--------------+---------------
+wisp-server-python (python3) | 86.77 MiB/s        | 132.99 MiB/s        | 437.66 MiB/s | 562.46 MiB/s 
+-----------------------------+--------------------+---------------------+--------------+---------------
+wisp-server-python (pypy3)   | 85.9 MiB/s         | 112.86 MiB/s        | 115.64 MiB/s | 108.68 MiB/s 
+-----------------------------+--------------------+---------------------+--------------+---------------
+epoxy-server                 | 83.8 MiB/s         | 255.34 MiB/s        | 478.82 MiB/s | 726.57 MiB/s 
+-----------------------------+--------------------+---------------------+--------------+---------------
+WispServerCpp                | DNF                | DNF                 | DNF          | DNF          
 ```
 ## Copyright:
 This program is licensed under the GNU GPL v3.
