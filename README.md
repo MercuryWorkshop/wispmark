@@ -23,13 +23,13 @@ This program pairs each Wisp server with each Wisp client, with a TCP echo serve
 CPU: AMD EPYC 7763 64-Core Processor (x4)
                              | wisp-client-js (1) | wisp-client-js (10) | wisp-mux (1) | wisp-mux (10)
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-node             | 78.26 MiB/s        | 105.03 MiB/s        | 116.31 MiB/s | 101.81 MiB/s 
+wisp-server-node             | 77.83 MiB/s        | 436.11 MiB/s        | 547.92 MiB/s | 444.76 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-python (python3) | 86.77 MiB/s        | 132.99 MiB/s        | 437.66 MiB/s | 562.46 MiB/s 
+wisp-server-python (python3) | 86.58 MiB/s        | 125.66 MiB/s        | 384.93 MiB/s | 506.84 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-python (pypy3)   | 85.9 MiB/s         | 112.86 MiB/s        | 115.64 MiB/s | 108.68 MiB/s 
+wisp-server-python (pypy3)   | 83.82 MiB/s        | 111.41 MiB/s        | 113.12 MiB/s | 102.62 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-epoxy-server                 | 83.8 MiB/s         | 255.34 MiB/s        | 478.82 MiB/s | 726.57 MiB/s 
+epoxy-server                 | 83.21 MiB/s        | 353.91 MiB/s        | 563.55 MiB/s | 726.93 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
 WispServerCpp                | DNF                | DNF                 | DNF          | DNF          
 ```

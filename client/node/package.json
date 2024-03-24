@@ -4,6 +4,7 @@
   "description": "",
   "main": "client.js",
   "dependencies": {
-    "@mercuryworkshop/wisp-client-js": "^1.2.4"
+    "@mercuryworkshop/wisp-client-js": "^1.2.4",
+    "bufferutil": "^4.0.8"
   }
 }
