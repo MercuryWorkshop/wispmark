@@ -13,17 +13,33 @@ import client
 import util
 
 $RAISE_SUBPROC_ERROR = True
+$XONSH_SHOW_TRACEBACK = True
+
 wisp_port = 6001
 echo_port = 6002
+server_timeout = 5
+test_duration = 5
+
+echo_dir = util.base_path / "echo"
+echo_repo = echo_dir / "tokio"
+
+def install_echo():
+  mkdir -p @(echo_dir)
+  if echo_repo.exists():
+    return
+  git clone "https://github.com/tokio-rs/tokio" @(echo_repo)
+  with util.temp_cd(echo_repo):
+    cargo build --release --example echo
 
 def run_echo():
-  socat TCP4-LISTEN:@(echo_port),fork EXEC:cat &
-  return util.last_job()
+  with util.temp_cd(echo_repo):
+    cargo run --release --example echo 127.0.0.1:@(echo_port) 2>&1 >/dev/null &
+    return util.last_job()
 
 def wait_for_server():
-  for i in range(0, 10):
+  for i in range(0, int(server_timeout / 2)):
     try:
-      requests.head(f"http://127.0.0.1:{wisp_port}/", timeout=1)
+      requests.get(f"http://127.0.0.1:{wisp_port}/", timeout=0.5)
       break
     except:
       time.sleep(0.5)
@@ -32,11 +48,13 @@ def wait_for_server():
 
 def main():
   sudo true
+  install_echo()
   echo_process = run_echo()
 
   for implementation in server.implementations + client.implementations:
     if implementation.is_installed():
       continue
+    print(f"installing {implementation.name}")
     implementation.install()
 
   for server_impl in server.implementations:
@@ -49,11 +67,12 @@ def main():
 
       print("running client and recording speeds...")
       client_job = client_impl.run(wisp_port, echo_port)
-      speed = util.measure_bandwidth(echo_port, 5)
-
-      print(f"result: {round(speed / (1024 ** 2), 2)} MiB/s")
+      try:
+        speed = util.measure_bandwidth(echo_port, test_duration)
+        print(f"result: {round(speed / (1024 ** 2), 2)} MiB/s")
+      except subprocess.CalledProcessError as e:
+        print(f"error: failure to measure bandwidth. the wisp server may not have started properly.")
       util.kill_job(server_job, client_job)
-
 
   util.kill_job(echo_process)
 

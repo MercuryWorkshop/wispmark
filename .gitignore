@@ -1,1 +1,9 @@
 *node_modules
+*package_lock.json
+
+/server/python
+/server/rust
+/server/cpp
+/client/rust/target
+/client/rust/Cargo.lock
+/echo

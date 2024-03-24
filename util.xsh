@@ -5,6 +5,7 @@ import pathlib
 import contextlib
 import re
 import os
+import subprocess
 
 base_path = pathlib.Path(__file__).resolve().parent
 
@@ -18,11 +19,14 @@ def last_job():
 def kill_job(*jobs):
   for job in jobs:
     for pid in job["pids"]:
-      kill @(pid)
+      try:
+        kill @(pid) || True
+      except subprocess.CalledProcessError:
+        pass
 
 #calculate the bandwidth on a tcp port over a certain interval
 def measure_bandwidth(port, duration):
-  iftop_out = $(sudo iftop -i lo -f @(f"port {port}") -t -s @(duration) -B 2>/dev/null)
+  iftop_out = $(timeout @(duration + 1) sudo iftop -i lo -f @(f"port {port}") -t -s @(duration) -B 2>/dev/null)
   iftop_regex = r'Cumulative.+?:.+?([\d.]+)([A-Z]+)\n'
 
   unit_names = ["B", "KB", "MB", "GB", "TB"]
