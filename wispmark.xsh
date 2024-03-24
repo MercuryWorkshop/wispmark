@@ -5,6 +5,7 @@ import sys
 import subprocess
 import traceback
 import time
+import re
 import requests
 import xonsh
 
@@ -57,7 +58,9 @@ def main():
     print(f"installing {implementation.name}")
     implementation.install()
 
+  table = [[""] + [impl.name for impl in client.implementations]]
   for server_impl in server.implementations:
+    table.append([server_impl.name])
     for client_impl in client.implementations:
       print(f"testing {server_impl.name} with {client_impl.name}")
       
@@ -67,14 +70,38 @@ def main():
 
       print("running client and recording speeds...")
       client_job = client_impl.run(wisp_port, echo_port)
+
       try:
         speed = util.measure_bandwidth(echo_port, test_duration)
-        print(f"result: {round(speed / (1024 ** 2), 2)} MiB/s")
+        result = f"{round(speed / (1024 ** 2), 2)} MiB/s"
+        print(f"result: {result}")
       except subprocess.CalledProcessError as e:
         print(f"error: failure to measure bandwidth. the wisp server may not have started properly.")
+        result = "DNF"
+
+      table[-1].append(result)
       util.kill_job(server_job, client_job)
 
   util.kill_job(echo_process)
+
+  #print out our results
+  print("WispMark has finshed.\n\n")
+  cpu_regex = r'model name.+?: (.+?)\n'
+  cpu_names = re.findall(cpu_regex, p"/proc/cpuinfo".read_text())
+  print(f"CPU: {cpu_names[0]} (x{len(cpu_names)})")
+
+  col_width = 0
+  for row in table:
+    widths = [len(cell) for cell in row]
+    col_width = max(col_width, max(widths))
+
+  rows = []
+  for row in table:
+    cells = [cell.ljust(col_width) for cell in row]
+    rows.append(" | ".join(cells))
+  seperator = "-+-".join(["-" * col_width] * len(table[0]))
+  table_str = f"\n{seperator}\n".join(rows)
+  print(table_str)
 
 if __name__ == "__main__":
   try:
