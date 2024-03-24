@@ -1,16 +1,40 @@
 #!/usr/bin/env xonsh
 
 import xonsh
+import pathlib
+import contextlib
+import re
+import os
 
-def get_last_job():
+base_path = pathlib.Path(__file__).resolve().parent
+
+def last_job():
   jobs = list(xonsh.jobs.get_jobs().values())
   if not jobs:
     return None
   last_job = max(jobs, key=lambda x: x["started"])
   return last_job
 
+def kill_job(*jobs):
+  for job in jobs:
+    for pid in job["pids"]:
+      kill @(pid)
+
 #calculate the bandwidth on a tcp port over a certain interval
 def measure_bandwidth(port, duration):
-  netwatch_out = $(tcpdump -i lo -e -q -nn -t 2> /dev/null | python3 netwatch.py @(port) @(duration))
-  netwatch_data = [float(line) for line in netwatch_out.strip().split("\n")]
-  return sum(netwatch_data) / len(netwatch_data)
+  iftop_out = $(sudo iftop -i lo -f @(f"port {port}") -t -s @(duration) -B 2>/dev/null)
+  iftop_regex = r'Cumulative.+?:.+?([\d.]+)([A-Z]+)\n'
+
+  unit_names = ["B", "KB", "MB", "GB", "TB"]
+  amount, unit = re.findall(iftop_regex, iftop_out)[0]
+  multiplier = 1024 ** unit_names.index(unit)
+  return float(amount) * multiplier / duration
+
+@contextlib.contextmanager
+def temp_cd(path):
+  original_path = os.getcwd()
+  os.chdir(path)
+  try:
+    yield
+  finally:
+    os.chdir(original_path)

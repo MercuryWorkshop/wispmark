@@ -1,37 +1,48 @@
 #!/usr/bin/env xonsh
 
-import xonsh
-import pathlib
-import time
-
 import util
 
-server_dir = pathlib.Path(__file__).resolve().parent / "server"
+server_dir = util.base_path / "server"
 
-class WispServer():
+class WispServer:
   name = "generic wisp server"
 
-  def install(self):
+  @classmethod
+  def install(cls):
+    pass
+
+  @classmethod
+  def is_installed(cls):
+    pass
+
+  @classmethod
+  def run(cls, port):
     pass
   
-  def run(self, port):
-    pass
-  
-  def compat_check(self):
+  @classmethod
+  def compat_check(cls):
     return True
 
 class NodeWispServer(WispServer):
   name = "wisp-server-node"
   path = server_dir / "node"
 
-  def install(self):
-    mkdir -p @(self.path)
-    cd @(self.path)
-    npm i
+  @classmethod
+  def install(cls):
+    mkdir -p @(cls.path)
+    with util.temp_cd(cls.path):  
+      npm i
   
-  def is_installed(self):
-    return (self.path / "node_modules").exists()
+  @classmethod
+  def is_installed(cls):
+    return (cls.path / "node_modules").exists()
   
-  def run(self, port):
-    node server.js @(port) &
-    return util.get_last_job()
+  @classmethod
+  def run(cls, port):
+    with util.temp_cd(cls.path):  
+      node server.js @(port) &
+      return util.last_job()
+
+implementations = [
+  NodeWispServer
+]
