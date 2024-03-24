@@ -57,20 +57,25 @@ def main():
       continue
     print(f"installing {implementation.name}")
     implementation.install()
+  
+  log_dir = util.base_path / "log"
+  mkdir -p @(log_dir)
 
   table = [[""] + [impl.name for impl in client.implementations]]
   for server_impl in server.implementations:
     table.append([server_impl.name])
     for client_impl in client.implementations:
       print(f"testing {server_impl.name} with {client_impl.name}")
+      server_log_file = log_dir / f"SERVER_{server_impl.name}_{client_impl.name}.log"
+      client_log_file = log_dir / f"CLIENT_{server_impl.name}_{client_impl.name}.log"
       
       try:
         print("starting server")
-        server_job = server_impl.run(wisp_port)
+        server_job = server_impl.run(wisp_port, server_log_file)
         wait_for_server()
 
         print("running client and recording speeds...")
-        client_job = client_impl.run(wisp_port, echo_port)
+        client_job = client_impl.run(wisp_port, echo_port, client_log_file)
 
         speed = util.measure_bandwidth(echo_port, test_duration)
         result = f"{round(speed / (1024 ** 2), 2)} MiB/s"

@@ -11,9 +11,12 @@ let conn = new WispConnection(ws_url);
 conn.addEventListener("open", () => {
   for (let i=0; i<stream_count; i++) {
     let stream = conn.create_stream("127.0.0.1", target_port);
+    
     setInterval(() => {
       if (stream.send_buffer.length < 100) {
-        stream.send(payload);
+        for (let j=0; j<10; j++) {
+          stream.send(payload);
+        }
       }
     }, 0);
   } 

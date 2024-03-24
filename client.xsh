@@ -20,9 +20,9 @@ class NodeWispClient:
   def is_installed(self):
     return (self.path / "node_modules").exists()
   
-  def run(self, server_port, target_port):
+  def run(self, server_port, target_port, log):
     with util.temp_cd(self.path):
-      node client.mjs @(server_port) @(target_port) @(self.streams) &
+      node client.mjs @(server_port) @(target_port) @(self.streams) 2>&1 >@(log) &
       return util.last_job()
 
 
@@ -41,9 +41,9 @@ class RustWispClient:
   def is_installed(self):
     return (self.path / "Cargo.lock").exists()
   
-  def run(self, server_port, target_port):
+  def run(self, server_port, target_port, log):
     with util.temp_cd(self.path):
-      cargo r -r 127.0.0.1 @(server_port) / 127.0.0.1 @(target_port) false @(self.streams) 2>&1 >/dev/null &
+      cargo r -r 127.0.0.1 @(server_port) / 127.0.0.1 @(target_port) false @(self.streams) 2>&1 >@(log) &
       return util.last_job()
 
 implementations = [

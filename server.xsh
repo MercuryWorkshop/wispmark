@@ -16,9 +16,9 @@ class NodeWispServer:
   def is_installed(self):
     return (self.path / "node_modules").exists()
   
-  def run(self, port):
+  def run(self, port, log):
     with util.temp_cd(self.path):  
-      node server.js @(port) >/dev/null &
+      node server.js @(port) 2>&1 >@(log) &
       return util.last_job()
 
 
@@ -44,9 +44,9 @@ class PythonWispServer:
   def is_installed(self):
     return self.venv.exists()
   
-  def run(self, port):
+  def run(self, port, log):
     with util.temp_cd(self.git_repo):
-      bash -c @(f"source {self.venv}/bin/activate; {self.python} main.py --port={port} --allow-loopback") >/dev/null &
+      bash -c @(f"source {self.venv}/bin/activate; {self.python} main.py --port={port} --allow-loopback 2>&1 >{log}") &
       return util.last_job()
 
 
@@ -65,9 +65,9 @@ class RustWispServer:
   def is_installed(self):
     return (self.src_dir / "installed").exists()
   
-  def run(self, port):
+  def run(self, port, log):
     with util.temp_cd(self.src_dir):
-      cargo r -r -- --port=@(port) --host=127.0.0.1 2>&1 >/dev/null &
+      cargo r -r -- --port=@(port) --host=127.0.0.1 2>&1 >@(log) &
       return util.last_job()
 
 class CPPWispServer:
@@ -99,9 +99,9 @@ class CPPWispServer:
   def is_installed(self):
     return (self.git_repo / "wispserver").exists()
   
-  def run(self, port):
+  def run(self, port, log):
     with util.temp_cd(self.git_repo):
-      ./wispserver @(port) >/dev/null &
+      ./wispserver @(port) 2>&1 >@(log) &
       return util.last_job()
 
 implementations = [
