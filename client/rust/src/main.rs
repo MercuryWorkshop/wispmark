@@ -2,7 +2,7 @@
 
 use bytes::Bytes;
 use fastwebsockets::{handshake, FragmentCollectorRead};
-use futures::io::AsyncWriteExt;
+use futures::AsyncWriteExt;
 use http_body_util::Empty;
 use hyper::{
     header::{CONNECTION, UPGRADE},
@@ -73,6 +73,12 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .ok_or(StrError::new("no should tls"))?
         .parse()?;
 
+    let stream_count: u16 = std::env::args()
+        .nth(7)
+        .ok_or(StrError::new("no stream count"))?
+        .parse()?;
+
+
     let socket = TcpStream::connect(format!("{}:{}", &addr, addr_port)).await?;
     let socket = if should_tls {
         let cx = TlsConnector::from(native_tls::TlsConnector::builder().build()?);
@@ -103,21 +109,27 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     tokio::task::spawn(async move { println!("err: {:?}", fut.await); });
 
-    let mut hi: u64 = 0;
-    let payload = "a".repeat(1024 * 50);
-    let payload_bytes = payload.as_bytes();
-    loop {
+    
+    let mut tasks = Vec::with_capacity(stream_count.into());
+    for _ in 0..stream_count {
         let mut channel = mux
             .client_new_stream(StreamType::Tcp, addr_dest.clone(), addr_dest_port)
-            .await?
+            .await
+            .expect("idk")
             .into_io()
             .into_asyncrw();
-        for _ in 0..256 {
-            channel.write_all(payload_bytes).await?;
-            hi += 1;
-            println!("said hi {}", hi);
-        }
-        channel.close().await?;
+        let value = tokio::spawn(async move {
+            loop {
+                let payload = "a".repeat(1024 * 50);
+                let payload_bytes = payload.as_bytes();            
+                let _ = channel.write_all(payload_bytes).await;
+            }
+        });
+        tasks.push(value);
+    }
+
+    for task in tasks {
+        task.await.unwrap();
     }
 
     #[allow(unreachable_code)]

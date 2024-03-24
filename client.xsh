@@ -8,6 +8,10 @@ class NodeWispClient:
   name = "wisp-client-js"
   path = client_dir / "node"
 
+  def __init__(self, streams):
+    self.streams = streams
+    self.name = f"{self.name} ({streams})"
+
   def install(self):
     mkdir -p @(self.path)
     with util.temp_cd(self.path):
@@ -18,13 +22,17 @@ class NodeWispClient:
   
   def run(self, server_port, target_port):
     with util.temp_cd(self.path):
-      node client.mjs @(server_port) @(target_port) &
+      node client.mjs @(server_port) @(target_port) @(self.streams) &
       return util.last_job()
 
 
 class RustWispClient:
   name = "wisp-mux"
   path = client_dir / "rust"
+
+  def __init__(self, streams):
+    self.streams = streams
+    self.name = f"{self.name} ({streams})"
 
   def install(self):
     with util.temp_cd(self.path):
@@ -35,10 +43,12 @@ class RustWispClient:
   
   def run(self, server_port, target_port):
     with util.temp_cd(self.path):
-      cargo r -r 127.0.0.1 @(server_port) / 127.0.0.1 @(target_port) false 2>&1 >/dev/null &
+      cargo r -r 127.0.0.1 @(server_port) / 127.0.0.1 @(target_port) false @(self.streams) 2>&1 >/dev/null &
       return util.last_job()
 
 implementations = [
-  NodeWispClient(),
-  RustWispClient()
+  NodeWispClient(1),
+  NodeWispClient(10),
+  RustWispClient(1),
+  RustWispClient(10)
 ]

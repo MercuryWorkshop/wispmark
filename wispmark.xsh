@@ -64,18 +64,18 @@ def main():
     for client_impl in client.implementations:
       print(f"testing {server_impl.name} with {client_impl.name}")
       
-      print("starting server")
-      server_job = server_impl.run(wisp_port)
-      wait_for_server()
-
-      print("running client and recording speeds...")
-      client_job = client_impl.run(wisp_port, echo_port)
-
       try:
+        print("starting server")
+        server_job = server_impl.run(wisp_port)
+        wait_for_server()
+
+        print("running client and recording speeds...")
+        client_job = client_impl.run(wisp_port, echo_port)
+
         speed = util.measure_bandwidth(echo_port, test_duration)
         result = f"{round(speed / (1024 ** 2), 2)} MiB/s"
         print(f"result: {result}")
-      except subprocess.CalledProcessError as e:
+      except (subprocess.CalledProcessError, RuntimeError) as e:
         print(f"error: failure to measure bandwidth. the wisp server may not have started properly.")
         result = "DNF"
 
