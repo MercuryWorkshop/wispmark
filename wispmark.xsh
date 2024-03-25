@@ -1,6 +1,7 @@
 #!/usr/bin/env xonsh
 
 import os
+import socket
 import sys
 import subprocess
 import traceback
@@ -51,6 +52,18 @@ def main():
   sudo true
   install_echo()
   echo_process = run_echo()
+
+  for i in range(0, int(server_timeout / 2)):
+    s = socket.socket()
+    try:
+      s.connect(("127.0.0.1", echo_port)) 
+      s.close()
+      break
+    except:
+      time.sleep(0.5)
+  else:
+    raise RuntimeError("Echo server failed to start in time.")
+
 
   for implementation in server.implementations + client.implementations:
     if implementation.is_installed():
