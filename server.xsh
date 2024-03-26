@@ -46,7 +46,7 @@ class PythonWispServer:
   
   def run(self, port, log):
     with util.temp_cd(self.git_repo):
-      bash -c @(f"source {self.venv}/bin/activate; {self.python} main.py --port={port} --allow-loopback 2>&1 >{log}") &
+      bash -c @(f"source {self.venv}/bin/activate; {self.python} main.py --port={port} --allow-loopback 2>&1 >'{log}'") &
       return util.last_job()
 
 

@@ -25,6 +25,13 @@ def kill_job(*jobs):
       except subprocess.CalledProcessError:
         pass
 
+def kill_by_port(target_port):
+  netstat_out = $(sudo netstat -tulpn | grep LISTEN)
+  process_regex = r':(\d+).+?(\d+)/'
+  for port, pid in re.findall(process_regex, netstat_out):
+    if int(port) == target_port:
+      kill @(pid)
+
 #calculate the bandwidth on a tcp port over a certain interval
 def measure_bandwidth(port, duration):
   start = time.time()

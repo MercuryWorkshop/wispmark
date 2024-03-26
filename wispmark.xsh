@@ -48,11 +48,7 @@ def wait_for_server():
   else:
     raise RuntimeError("Server failed to start in time.")
 
-def main():
-  sudo true
-  install_echo()
-  echo_process = run_echo()
-
+def wait_for_socket():
   for i in range(0, int(server_timeout / 2)):
     s = socket.socket()
     try:
@@ -64,6 +60,11 @@ def main():
   else:
     raise RuntimeError("Echo server failed to start in time.")
 
+def main():
+  sudo true
+  install_echo()
+  echo_process = run_echo()
+  wait_for_socket()
 
   for implementation in server.implementations + client.implementations:
     if implementation.is_installed():
@@ -84,6 +85,7 @@ def main():
       
       try:
         print("starting server")
+        util.kill_by_port(wisp_port)
         server_job = server_impl.run(wisp_port, server_log_file)
         wait_for_server()
 
@@ -93,6 +95,7 @@ def main():
         speed = util.measure_bandwidth(echo_port, test_duration)
         result = f"{round(speed / (1024 ** 2), 2)} MiB/s"
         print(f"result: {result}")
+
       except (subprocess.CalledProcessError, RuntimeError) as e:
         print(f"error: failure to measure bandwidth. the wisp server may not have started properly.")
         result = "DNF"
