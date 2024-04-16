@@ -29,21 +29,24 @@ class NodeWispClient:
 class RustWispClient:
   name = "wisp-mux"
   path = client_dir / "rust"
+  src_dir = path / "simple-wisp-client"
 
   def __init__(self, streams):
     self.streams = streams
     self.name = f"{self.name} ({streams})"
 
   def install(self):
-    with util.temp_cd(self.path):
-      cargo build --release
+    if not self.path.exists():
+      git clone "https://github.com/MercuryWorkshop/epoxy-tls" @(self.path)
+    with util.temp_cd(self.src_dir):
+      cargo b -r
 
   def is_installed(self):
-    return (self.path / "Cargo.lock").exists()
+    return (self.path / "target" / "release" / "simple-wisp-client").exists()
   
   def run(self, server_port, target_port, log):
-    with util.temp_cd(self.path):
-      cargo r -r 127.0.0.1 @(server_port) / 127.0.0.1 @(target_port) false @(self.streams) 2>&1 >@(log) &
+    with util.temp_cd(self.src_dir):
+      cargo r -r -- -w ws://127.0.0.1:@(server_port)/ -t 127.0.0.1:@(target_port) -s @(self.streams) -p 50 2>&1 >@(log) &
       return util.last_job()
 
 implementations = [
