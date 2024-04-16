@@ -46,7 +46,7 @@ class RustWispClient:
   
   def run(self, server_port, target_port, log):
     with util.temp_cd(self.src_dir):
-      cargo r -r -- -w ws://127.0.0.1:@(server_port)/ -t 127.0.0.1:@(target_port) -s @(self.streams) -p 50 2>&1 >@(log) &
+      cargo r -r -- -w ws://127.0.0.1:@(server_port)/ -t 127.0.0.1:@(target_port) -s @(self.streams) -p 50 --wisp-v1 2>&1 >@(log) &
       return util.last_job()
 
 implementations = [
