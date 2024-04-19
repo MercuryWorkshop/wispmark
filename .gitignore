@@ -4,7 +4,6 @@
 /server/python
 /server/rust
 /server/cpp
-/client/rust/target
-/client/rust/Cargo.lock
+/client/rust
 /echo
 /log

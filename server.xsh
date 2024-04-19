@@ -60,10 +60,9 @@ class RustWispServer:
       git clone "https://github.com/MercuryWorkshop/epoxy-tls" @(self.path)
     with util.temp_cd(self.src_dir):
       cargo build --release
-      touch installed
 
   def is_installed(self):
-    return (self.src_dir / "installed").exists()
+    return (self.path / "target" / "release" / "epoxy-server").exists()
   
   def run(self, port, log):
     with util.temp_cd(self.src_dir):
