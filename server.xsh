@@ -22,6 +22,23 @@ class NodeWispServer:
       return util.last_job()
 
 
+class JSWispServer:
+  name = "wisp-js"
+  path = server_dir / "js"
+
+  def install(self):
+    mkdir -p @(self.path)
+    with util.temp_cd(self.path):  
+      npm i
+  
+  def is_installed(self):
+    return (self.path / "node_modules").exists()
+  
+  def run(self, port, log):
+    with util.temp_cd(self.path):  
+      node server.mjs @(port) 2>&1 >@(log) &
+      return util.last_job()
+
 class PythonWispServer:
   name = "wisp-server-python"
   path = server_dir / "python"
@@ -105,6 +122,7 @@ class CPPWispServer:
 
 implementations = [
   NodeWispServer(),
+  JSWispServer(),
   PythonWispServer("python3"),
   PythonWispServer("pypy3"),
   RustWispServer(),

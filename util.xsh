@@ -19,6 +19,8 @@ def last_job():
 
 def kill_job(*jobs):
   for job in jobs:
+    if not job:
+      continue
     for pid in job["pids"]:
       try:
         kill @(pid)

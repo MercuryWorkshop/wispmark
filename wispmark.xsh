@@ -76,6 +76,9 @@ def main():
   mkdir -p @(log_dir)
 
   table = [[""] + [impl.name for impl in client.implementations]]
+  client_job = None
+  server_job = None
+
   for server_impl in server.implementations:
     table.append([server_impl.name])
     for client_impl in client.implementations:
