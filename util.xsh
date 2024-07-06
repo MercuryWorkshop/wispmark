@@ -32,7 +32,10 @@ def kill_by_port(target_port):
   process_regex = r':(\d+).+?(\d+)/'
   for port, pid in re.findall(process_regex, netstat_out):
     if int(port) == target_port:
-      kill @(pid)
+      try:
+        kill @(pid)
+      except subprocess.CalledProcessError:
+        pass
 
 #calculate the bandwidth on a tcp port over a certain interval
 def measure_bandwidth(port, duration):

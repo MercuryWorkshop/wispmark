@@ -35,17 +35,17 @@ Client:
 CPU: AMD EPYC 7763 64-Core Processor (x4)
                              | wisp-client-js (1) | wisp-client-js (10) | wisp-mux (1) | wisp-mux (10)
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-node             | 562.97 MiB/s       | 508.47 MiB/s        | 449.32 MiB/s | 450.9 MiB/s  
+wisp-server-node             | 564.51 MiB/s       | 625.76 MiB/s        | 536.33 MiB/s | 518.92 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-js                      | 415.07 MiB/s       | 459.76 MiB/s        | 456.14 MiB/s | 367.27 MiB/s 
+wisp-js                      | 474.45 MiB/s       | 501.36 MiB/s        | 447.08 MiB/s | 433.11 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-python (python3) | 121.27 MiB/s       | 132.82 MiB/s        | 406.74 MiB/s | 540.22 MiB/s 
+wisp-server-python (python3) | 134.8 MiB/s        | 139.96 MiB/s        | 345.19 MiB/s | 490.08 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-python (pypy3)   | 103.49 MiB/s       | 116.27 MiB/s        | 118.3 MiB/s  | 106.51 MiB/s 
+wisp-server-python (pypy3)   | 112.51 MiB/s       | 126.27 MiB/s        | 147.62 MiB/s | 133.97 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-epoxy-server                 | 396.7 MiB/s        | 457.08 MiB/s        | 348.25 MiB/s | 457.48 MiB/s 
+epoxy-server                 | 358.35 MiB/s       | 431.18 MiB/s        | 349.99 MiB/s | 412.63 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-WispServerCpp                | DNF                | 459.61 MiB/s        | 227.08 MiB/s | 486.46 MiB/s 
+WispServerCpp                | 269.02 MiB/s       | 552.78 MiB/s        | DNF          | 471.43 MiB/s 
 ```
 ## Copyright:
 This program is licensed under the GNU GPL v3.

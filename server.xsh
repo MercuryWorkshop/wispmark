@@ -56,14 +56,14 @@ class PythonWispServer:
 
     with util.temp_cd(self.git_repo):  
       @(self.python) -m venv @(self.venv)
-      bash -c @(f"source {self.venv}/bin/activate; pip3 install -r requirements.txt")
+      bash -c @(f"source {self.venv}/bin/activate; pip3 install -e .")
   
   def is_installed(self):
     return self.venv.exists()
   
   def run(self, port, log):
     with util.temp_cd(self.git_repo):
-      bash -c @(f"source {self.venv}/bin/activate; {self.python} main.py --port={port} --allow-loopback 2>&1 >'{log}'") &
+      bash -c @(f"source {self.venv}/bin/activate; {self.python} -m wisp.server --port={port} --allow-loopback 2>&1 >'{log}'") &
       return util.last_job()
 
 
@@ -96,7 +96,7 @@ class CPPWispServer:
   def install(self):
     core_count = $(nproc --all).strip()
     if not self.git_repo.exists():
-      git clone "https://github.com/FoxMoss/WispServerCpp" @(self.git_repo)
+      git clone "https://github.com/FoxMoss/WispServerCpp" @(self.git_repo) -b bleeding
     if not self.lib_repo.exists():
       git clone "https://github.com/uNetworking/uWebSockets" @(self.lib_repo) --recurse-submodules --shallow-submodules
     if not (self.prefix / "lib" / "libusockets.a").exists():
@@ -110,7 +110,7 @@ class CPPWispServer:
     with util.temp_cd(self.git_repo):
       #why is the L not capitalized?
       mkdir -p obj
-      make all FlAGS=@(f"-L{self.prefix / 'lib'} -I{self.prefix / 'include'}") -j@(core_count)
+      make all FlAGS=@(f"-Ofast -L{self.prefix / 'lib'} -I{self.prefix / 'include'}") -j@(core_count)
       
   def is_installed(self):
     return (self.git_repo / "wispserver").exists()

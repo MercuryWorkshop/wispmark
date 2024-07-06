@@ -41,7 +41,7 @@ def run_echo():
 def wait_for_server():
   for i in range(0, int(server_timeout / 2)):
     try:
-      requests.get(f"http://127.0.0.1:{wisp_port}/", timeout=0.5)
+      requests.get(f"http://127.0.0.1:{wisp_port}/", timeout=0.5).text
       break
     except:
       time.sleep(0.5)
@@ -95,12 +95,14 @@ def main():
         print("running client and recording speeds...")
         client_job = client_impl.run(wisp_port, echo_port, client_log_file)
 
+        time.sleep(1)
         speed = util.measure_bandwidth(echo_port, test_duration)
         result = f"{round(speed / (1024 ** 2), 2)} MiB/s"
         print(f"result: {result}")
 
       except (subprocess.CalledProcessError, RuntimeError) as e:
         print(f"error: failure to measure bandwidth. the wisp server may not have started properly.")
+        print(e)
         result = "DNF"
 
       table[-1].append(result)
