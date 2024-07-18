@@ -8,6 +8,7 @@ import traceback
 import time
 import re
 import requests
+import argparse
 import xonsh
 
 import server
@@ -115,6 +116,7 @@ def main():
   cpu_regex = r'model name.+?: (.+?)\n'
   cpu_names = re.findall(cpu_regex, p"/proc/cpuinfo".read_text())
   print(f"CPU: {cpu_names[0]} (x{len(cpu_names)})")
+  print(f"Test duration: {test_duration}s")
 
   col_widths = []
   for x, col in enumerate(table[0]):
@@ -131,6 +133,13 @@ def main():
   print(table_str)
 
 if __name__ == "__main__":
+  parser = argparse.ArgumentParser(
+    description=f"A benchmarking tool for Wisp protocol implementations."
+  )
+  parser.add_argument("--duration", default=test_duration, help=f"The duration of each test, in seconds. The default is {test_duration}s.")
+  args = parser.parse_args()
+  test_duration = int(args.duration)
+
   try:
     main()
   except Exception as e:

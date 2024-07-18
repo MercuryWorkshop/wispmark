@@ -30,22 +30,34 @@ Client:
 - [wisp-client-js](https://github.com/MercuryWorkshop/wisp-client-js/)
 - [wisp-mux](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/simple-wisp-client)
 
+## Usage:
+```
+usage: wispmark.xsh [-h] [--duration DURATION]
+
+A benchmarking tool for Wisp protocol implementations.
+
+options:
+  -h, --help           show this help message and exit
+  --duration DURATION  The duration of each test, in seconds. The default is 10s.
+```
+
 ## Current Results:
 ```
 CPU: AMD EPYC 7763 64-Core Processor (x4)
+Test duration: 60s
                              | wisp-client-js (1) | wisp-client-js (10) | wisp-mux (1) | wisp-mux (10)
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-node             | 564.51 MiB/s       | 625.76 MiB/s        | 536.33 MiB/s | 518.92 MiB/s 
+wisp-server-node             | 564.61 MiB/s       | 655.85 MiB/s        | DNF          | 516.09 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-js                      | 474.45 MiB/s       | 501.36 MiB/s        | 447.08 MiB/s | 433.11 MiB/s 
+wisp-js                      | 455.18 MiB/s       | 524.83 MiB/s        | 483.85 MiB/s | 516.07 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-python (python3) | 134.8 MiB/s        | 139.96 MiB/s        | 345.19 MiB/s | 490.08 MiB/s 
+wisp-server-python (python3) | 137.09 MiB/s       | 143.83 MiB/s        | DNF          | 569.98 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-wisp-server-python (pypy3)   | 112.51 MiB/s       | 126.27 MiB/s        | 147.62 MiB/s | 133.97 MiB/s 
+wisp-server-python (pypy3)   | 122.22 MiB/s       | 133.14 MiB/s        | 156.08 MiB/s | 144.29 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-epoxy-server                 | 358.35 MiB/s       | 431.18 MiB/s        | 349.99 MiB/s | 412.63 MiB/s 
+epoxy-server                 | 384.46 MiB/s       | 431.21 MiB/s        | 359.93 MiB/s | 434.56 MiB/s 
 -----------------------------+--------------------+---------------------+--------------+---------------
-WispServerCpp                | 269.02 MiB/s       | 552.78 MiB/s        | DNF          | 471.43 MiB/s 
+WispServerCpp                | DNF                | 448.17 MiB/s        | DNF          | 526.3 MiB/s  
 ```
 ## Copyright:
 This program is licensed under the GNU GPL v3.
