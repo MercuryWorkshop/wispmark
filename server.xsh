@@ -83,7 +83,8 @@ class RustWispServer:
   
   def run(self, port, log):
     with util.temp_cd(self.src_dir):
-      cargo r -r -- --port=@(port) --host=127.0.0.1 2>&1 >@(log) &
+      echo @(f"[server]\nbind = \"127.0.0.1:{port}\"") > config.toml
+      cargo r -r -- config.toml >@(log) &
       return util.last_job()
 
 class CPPWispServer:
@@ -98,7 +99,7 @@ class CPPWispServer:
     if not self.git_repo.exists():
       git clone "https://github.com/FoxMoss/WispServerCpp" @(self.git_repo) -b bleeding
     if not self.lib_repo.exists():
-      git clone "https://github.com/uNetworking/uWebSockets" @(self.lib_repo) --recurse-submodules --shallow-submodules
+      git clone "https://github.com/uNetworking/uWebSockets" @(self.lib_repo) --recurse-submodules --shallow-submodules -b v20.64.0
     if not (self.prefix / "lib" / "libusockets.a").exists():
       with util.temp_cd(self.lib_repo):
         mkdir -p @(self.prefix)/lib
@@ -110,7 +111,7 @@ class CPPWispServer:
     with util.temp_cd(self.git_repo):
       #why is the L not capitalized?
       mkdir -p obj
-      make all FlAGS=@(f"-Ofast -L{self.prefix / 'lib'} -I{self.prefix / 'include'}") -j@(core_count)
+      make all FlAGS=@(f"-Ofast -L{self.prefix / 'lib'} -I{self.prefix / 'include'} -march=native") -j@(core_count)
       
   def is_installed(self):
     return (self.git_repo / "wispserver").exists()
