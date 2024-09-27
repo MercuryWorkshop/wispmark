@@ -144,4 +144,4 @@ if __name__ == "__main__":
     main()
   except Exception as e:
     traceback.print_exc() 
-    xonsh.jobs.hup_all_jobs()
+    utils.xonsh_jobs.hup_all_jobs()

@@ -9,9 +9,13 @@ import subprocess
 import time
 
 base_path = pathlib.Path(__file__).resolve().parent
+if hasattr(xonsh, "jobs"):
+  xonsh_jobs = xonsh.jobs
+else:
+  xonsh_jobs = xonsh.procs.jobs
 
 def last_job():
-  jobs = list(xonsh.jobs.get_jobs().values())
+  jobs = list(xonsh_jobs.get_jobs().values())
   if not jobs:
     return None
   last_job = max(jobs, key=lambda x: x["started"])
