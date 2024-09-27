@@ -83,7 +83,7 @@ class RustWispServer:
   
   def run(self, port, log):
     with util.temp_cd(self.src_dir):
-      echo @(f"[server]\nbind = \"127.0.0.1:{port}\"") > config.toml
+      echo @(f"[server]\nbind = [\"tcp\", \"127.0.0.1:{port}\"]") > config.toml
       cargo r -r -- config.toml >@(log) &
       return util.last_job()
 

@@ -42,7 +42,27 @@ options:
 ```
 
 ## Current Results:
-Note that test results can vary wildly across CPUs.
+Note that test results can vary wildly across different CPUs.
+```
+CPU: AMD EPYC 7763 64-Core Processor (x4)
+Test duration: 30s
+                             | wisp-client-js (1) | wisp-client-js (10) | wisp-mux (1) | wisp-mux (10)
+-----------------------------+--------------------+---------------------+--------------+---------------
+wisp-server-node             | 514.8 MiB/s        | 538.3 MiB/s         | 544.88 MiB/s | 453.33 MiB/s 
+-----------------------------+--------------------+---------------------+--------------+---------------
+wisp-js                      | 468.02 MiB/s       | 550.85 MiB/s        | 473.53 MiB/s | 494.37 MiB/s 
+-----------------------------+--------------------+---------------------+--------------+---------------
+wisp-server-python (python3) | 518.12 MiB/s       | 720.57 MiB/s        | 487.35 MiB/s | 619.57 MiB/s 
+-----------------------------+--------------------+---------------------+--------------+---------------
+wisp-server-python (pypy3)   | 147.56 MiB/s       | 135.31 MiB/s        | 138.85 MiB/s | 166.3 MiB/s  
+-----------------------------+--------------------+---------------------+--------------+---------------
+epoxy-server                 | 545.03 MiB/s       | 782.16 MiB/s        | 578.43 MiB/s | DNF          
+-----------------------------+--------------------+---------------------+--------------+---------------
+WispServerCpp                | DNF                | 504.35 MiB/s        | 124.9 MiB/s  | 146.64 MiB/s 
+```
+
+### Old Results:
+From July 2024:
 ```
 CPU: AMD EPYC 7763 64-Core Processor (x4)
 Test duration: 60s

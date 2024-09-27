@@ -5,6 +5,6 @@
   "main": "server.js",
   "dependencies": {
     "bufferutil": "^4.0.8",
-    "@mercuryworkshop/wisp-js": "github:MercuryWorkshop/wisp-client-js#rewrite"
+    "@mercuryworkshop/wisp-js": "^0.3.1"
   }
 }

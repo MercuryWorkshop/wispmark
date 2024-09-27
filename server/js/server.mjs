@@ -6,6 +6,8 @@ const server = http.createServer((req, res) => {
   res.end("wisp server js rewrite");
 });
 logging.set_level(logging.DEBUG);
+wisp.options.allow_private_ips = true;
+wisp.options.allow_loopback_ips = true;
 
 server.on("upgrade", (req, socket, head) => {
   wisp.routeRequest(req, socket, head);
