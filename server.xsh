@@ -72,6 +72,10 @@ class RustWispServer:
   path = server_dir / "rust"
   src_dir = path / "server"
 
+  def __init__(self, threading):
+    self.threading = threading
+    self.name = f"{self.name} ({threading})"
+
   def install(self):
     if not self.path.exists():
       git clone "https://github.com/MercuryWorkshop/epoxy-tls" @(self.path)
@@ -83,7 +87,7 @@ class RustWispServer:
   
   def run(self, port, log):
     with util.temp_cd(self.src_dir):
-      echo @(f"[server]\nbind = [\"tcp\", \"127.0.0.1:{port}\"]") > config.toml
+      echo @(f"[server]\nbind = [\"tcp\", \"127.0.0.1:{port}\"]\nruntime = \"{self.threading}\"") > config.toml
       cargo r -r -- config.toml >@(log) &
       return util.last_job()
 
@@ -125,8 +129,10 @@ implementations = [
   NodeWispServer(),
   JSWispServer(),
   PythonWispServer("python3"),
-  PythonWispServer("pypy3"),
-  RustWispServer(),
+#  PythonWispServer("pypy3"),
+  RustWispServer("singlethread"),
+  RustWispServer("multithread"),
+  RustWispServer("multithreadalt"),
   CPPWispServer()
 ]
 
