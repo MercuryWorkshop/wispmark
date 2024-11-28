@@ -80,6 +80,7 @@ class RustWispServer:
     if not self.path.exists():
       git clone "https://github.com/MercuryWorkshop/epoxy-tls" @(self.path)
     with util.temp_cd(self.src_dir):
+      $RUSTFLAGS="--cfg tokio_unstable"
       cargo build --release
 
   def is_installed(self):
@@ -88,7 +89,7 @@ class RustWispServer:
   def run(self, port, log):
     with util.temp_cd(self.src_dir):
       echo @(f"[server]\nbind = [\"tcp\", \"127.0.0.1:{port}\"]\nruntime = \"{self.threading}\"") > config.toml
-      cargo r -r -- config.toml >@(log) &
+      @(self.path / "target" / "release" / "epoxy-server") config.toml >@(log) &
       return util.last_job()
 
 class CPPWispServer:
@@ -124,6 +125,21 @@ class CPPWispServer:
     with util.temp_cd(self.git_repo):
       ./wispserver @(port) 2>&1 >@(log) &
       return util.last_job()
+
+class CustomWispServer:
+  def __init__(self, name, path):
+    self.name = name
+    self.path = path
+
+  def install(self):
+    pass
+  
+  def is_installed(self):
+    return True
+  
+  def run(self, port, log):
+    @(self.path) @(port) 2>&1 >@(log) &
+    return util.last_job()
 
 implementations = [
   NodeWispServer(),
