@@ -17,7 +17,7 @@ You must also be on a recent Linux distribution. Debian 12 and Arch Linux have b
 
 An easy way to install Xonsh is to first clone this repo, then run the following commands:
 ```
-pip3 install -venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip3 install -r requirements.txt
 ```
