@@ -18,7 +18,7 @@ class NodeWispServer:
   
   def run(self, port, log):
     with util.temp_cd(self.path):  
-      node server.js @(port) 2>&1 >@(log) &
+      node server.mjs @(port) 2>&1 >@(log) &
       return util.last_job()
 
 

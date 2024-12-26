@@ -1,10 +1,10 @@
 {
-  "name": "wisp-client-js-cli",
+  "name": "wisp-js-cli",
   "version": "1.0.0",
   "description": "",
   "main": "client.js",
   "dependencies": {
-    "@mercuryworkshop/wisp-client-js": "^1.2.4",
+    "@mercuryworkshop/wisp-js": "github:mercuryworkshop/wisp-client-js#rewrite",
     "bufferutil": "^4.0.8"
   }
 }

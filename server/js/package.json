@@ -2,9 +2,9 @@
   "name": "wisp-js-cli",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "server.mjs",
   "dependencies": {
     "bufferutil": "^4.0.8",
-    "@mercuryworkshop/wisp-js": "^0.3.1"
+    "@mercuryworkshop/wisp-js": "^0.3.3"
   }
 }

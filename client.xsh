@@ -5,8 +5,8 @@ import util
 client_dir = util.base_path / "client"
 
 class NodeWispClient:
-  name = "wisp-client-js"
-  path = client_dir / "node"
+  name = "wisp-js"
+  path = client_dir / "js"
 
   def __init__(self, streams):
     self.streams = streams
