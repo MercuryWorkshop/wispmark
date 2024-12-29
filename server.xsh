@@ -92,6 +92,25 @@ class RustWispServer:
       @(self.path / "target" / "release" / "epoxy-server") config.toml >@(log) &
       return util.last_job()
 
+class CrystalWispServer:
+  name = "wisp-server-crystal"
+  path = server_dir / "crystal"
+  src_path = path / "git"
+
+  def install(self):
+    if not self.src_path.exists():
+      git clone "https://github.com/Astatine-Development/wisp-server-crystal" @(self.src_path)
+    with util.temp_cd(self.src_path):
+      crystal build wisp.cr --release --no-debug --progress -o wisp
+
+  def is_installed(self):
+    return (self.src_path / "wisp").exists()
+  
+  def run(self, port, log):
+    with util.temp_cd(self.path):
+      @(self.src_path / "wisp") 2>&1 >@(log) &
+      return util.last_job()
+
 class CPPWispServer:
   name = "WispServerCpp"
   path = server_dir / "cpp"
@@ -149,6 +168,7 @@ implementations = [
   RustWispServer("singlethread"),
   RustWispServer("multithread"),
   RustWispServer("multithreadalt"),
+  CrystalWispServer(),
   CPPWispServer()
 ]
 

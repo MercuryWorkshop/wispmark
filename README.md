@@ -10,6 +10,7 @@ You need:
 - CPython and PyPy
 - NodeJS
 - Rust Nightly
+- Crystal
 - GCC
 - iftop
 
@@ -30,14 +31,16 @@ This program pairs each Wisp server with each Wisp client, with a TCP echo serve
 ### Implementations Tested:
 Server:
 - [wisp-server-node](https://github.com/MercuryWorkshop/wisp-server-node)
-- [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite)
+- [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/server)
 - [wisp-server-python](https://github.com/MercuryWorkshop/wisp-server-python)
 - [epoxy-server](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/server)
 - [WispServerCpp](https://github.com/FoxMoss/WispServerCpp)
+- [wisp-server-crystal](https://github.com/Astatine-Development/wisp-server-crystal)
 
 Client:
-- [wisp-client-js](https://github.com/MercuryWorkshop/wisp-client-js/)
+- [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/client)
 - [wisp-mux](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/simple-wisp-client)
+- [wisp-client-crystal](https://github.com/Astatine-Development/wisp-client-crystal)
 
 ## Usage:
 ```

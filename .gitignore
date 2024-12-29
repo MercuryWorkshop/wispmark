@@ -1,10 +1,12 @@
 .venv
 *node_modules
 *package-lock.json
-
+/server/crystal/git
 /server/python
 /server/rust
 /server/cpp
+/client/crystal/git
+/client/crystal/demo
 /client/rust
 /echo
 /log
