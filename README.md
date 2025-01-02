@@ -16,14 +16,7 @@ You need:
 
 You must also be on a recent Linux distribution. Debian 12 and Arch Linux have been tested to work.
 
-An easy way to install Xonsh is to first clone this repo, then run the following commands:
-```
-python3 -m venv .venv
-source .venv/bin/activate
-pip3 install -r requirements.txt
-```
-
-Then run ./wispmark.xsh to start the tests.
+Run ./wispmark.xsh to start the tests. If you don't already have Xonsh installed, run `./wispmark.sh` which is a wrapper that will install Xonsh in a Python virtual environment.
 
 Note: if you want to rebuild all of the server and client implementations to run a clean test, you can run: `git clean -ffXd`
 
@@ -44,13 +37,14 @@ Client:
 
 ## Usage:
 ```
-usage: wispmark.xsh [-h] [--duration DURATION]
+usage: wispmark.xsh [-h] [--duration DURATION] [--print-md]
 
 A benchmarking tool for Wisp protocol implementations.
 
 options:
   -h, --help           show this help message and exit
   --duration DURATION  The duration of each test, in seconds. The default is 10s.
+  --print-md           Print a markdown table after test results are complete.
 ```
 
 ## Current Results:
@@ -59,22 +53,17 @@ Note that test results can vary wildly across different CPUs.
 ```
 CPU: AMD EPYC 7763 64-Core Processor (x4)
 Test duration: 30s
-                              | wisp-js (1)  | wisp-js (10) | wisp-js (5x10) | wisp-mux (1) | wisp-mux (10) | wisp-mux (5x10)
-------------------------------+--------------+--------------+----------------+--------------+---------------+-----------------
-wisp-server-node              | 528.34 MiB/s | 497.42 MiB/s | 436.79 MiB/s   | 460.2 MiB/s  | 432.86 MiB/s  | 393.69 MiB/s
-------------------------------+--------------+--------------+----------------+--------------+---------------+-----------------
-wisp-js                       | 504.12 MiB/s | 510.49 MiB/s | 493.95 MiB/s   | 494.15 MiB/s | 463.65 MiB/s  | 430.02 MiB/s
-------------------------------+--------------+--------------+----------------+--------------+---------------+-----------------
-wisp-server-python (python3)  | 592.0 MiB/s  | 683.76 MiB/s | 666.32 MiB/s   | 494.15 MiB/s | 456.96 MiB/s  | 622.57 MiB/s
-------------------------------+--------------+--------------+----------------+--------------+---------------+-----------------
-epoxy-server (singlethread)   | 581.76 MiB/s | 815.15 MiB/s | 761.64 MiB/s   | 580.03 MiB/s | 967.78 MiB/s  | 743.99 MiB/s
-------------------------------+--------------+--------------+----------------+--------------+---------------+-----------------
-epoxy-server (multithread)    | 565.49 MiB/s | 810.79 MiB/s | 867.38 MiB/s   | 556.75 MiB/s | 994.0 MiB/s   | 1012.37 MiB/s
-------------------------------+--------------+--------------+----------------+--------------+---------------+-----------------
-epoxy-server (multithreadalt) | 555.11 MiB/s | 768.52 MiB/s | 803.33 MiB/s   | 561.86 MiB/s | 983.38 MiB/s  | 1056.13 MiB/s
-------------------------------+--------------+--------------+----------------+--------------+---------------+-----------------
-WispServerCpp                 | DNF          | 443.09 MiB/s | 532.42 MiB/s   | 127.28 MiB/s | 160.08 MiB/s  | 261.04 MiB/s
 ```
+|                               | wisp-js (1)  | wisp-js (10) | wisp-js (5x10) | wisp-mux (1) | wisp-mux (10) | wisp-mux (5x10) |
+|-------------------------------|--------------|--------------|----------------|--------------|---------------|-----------------|
+| wisp-server-node              | 491.03 MiB/s | 453.61 MiB/s | 440.19 MiB/s   | 463.48 MiB/s | 456.93 MiB/s  | 436.61 MiB/s    |
+| wisp-js                       | 503.89 MiB/s | 501.09 MiB/s | 456.92 MiB/s   | 487.5 MiB/s  | 447.01 MiB/s  | 437.64 MiB/s    |
+| wisp-server-python (python3)  | 433.22 MiB/s | 693.72 MiB/s | 629.72 MiB/s   | 483.81 MiB/s | 470.2 MiB/s   | 551.59 MiB/s    |
+| epoxy-server (singlethread)   | 569.02 MiB/s | 829.39 MiB/s | 841.21 MiB/s   | 568.54 MiB/s | 1004.86 MiB/s | 921.1 MiB/s     |
+| epoxy-server (multithread)    | 565.2 MiB/s  | 805.48 MiB/s | 907.76 MiB/s   | 568.58 MiB/s | 1043.22 MiB/s | 1079.27 MiB/s   |
+| epoxy-server (multithreadalt) | 565.13 MiB/s | 707.72 MiB/s | 793.26 MiB/s   | 561.48 MiB/s | 942.28 MiB/s  | 981.91 MiB/s    |
+| WispServerCpp                 | 228.59 MiB/s | 453.17 MiB/s | 559.58 MiB/s   | 126.3 MiB/s  | DNF           | 274.52 MiB/s    |
+
 
 ### Old Results:
 

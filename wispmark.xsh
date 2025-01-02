@@ -22,6 +22,7 @@ wisp_port = 6001
 echo_port = 6002
 server_timeout = 5
 test_duration = 10
+print_md = False
 
 echo_dir = util.base_path / "echo"
 echo_repo = echo_dir / "tokio"
@@ -60,6 +61,34 @@ def wait_for_socket():
       time.sleep(0.5)
   else:
     raise RuntimeError("Echo server failed to start in time.")
+
+def print_table(table, print_md):
+  corner_separator = "-|-" if print_md else "-+-"
+  col_widths = []
+  for x, col in enumerate(table[0]):
+    col_widths.append(0)
+    for y in range(len(table)):
+      col_widths[-1] = max(col_widths[-1], len(table[y][x]))
+
+  rows = []
+  for row in table:
+    cells = [cell.ljust(col_widths[x]) for x, cell in enumerate(row)]
+    row = " | ".join(cells)
+    if print_md:
+      row = f"| {row} |"
+    rows.append(row)
+
+  row_separator = corner_separator.join(["-" * w for w in col_widths]) + "-"
+  if print_md:
+    row_separator = f"|-{row_separator}|"
+
+  if print_md:
+    table_str = f"\n{row_separator}\n".join(rows[:2])
+    table_str += "\n" + "\n".join(rows[2:])
+  else:
+    table_str = f"\n{row_separator}\n".join(rows)
+
+  print(table_str)
 
 def main():
   sudo true
@@ -118,26 +147,16 @@ def main():
   print(f"CPU: {cpu_names[0]} (x{len(cpu_names)})")
   print(f"Test duration: {test_duration}s")
 
-  col_widths = []
-  for x, col in enumerate(table[0]):
-    col_widths.append(0)
-    for y in range(len(table)):
-      col_widths[-1] = max(col_widths[-1], len(table[y][x]))
-
-  rows = []
-  for row in table:
-    cells = [cell.ljust(col_widths[x]) for x, cell in enumerate(row)]
-    rows.append(" | ".join(cells))
-  seperator = "-+-".join(["-" * w for w in col_widths]) + "-"
-  table_str = f"\n{seperator}\n".join(rows)
-  print(table_str)
+  print_table(table, print_md)
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=f"A benchmarking tool for Wisp protocol implementations.")
   parser.add_argument("--duration", default=test_duration, help=f"The duration of each test, in seconds. The default is {test_duration}s.")
+  parser.add_argument("--print-md", default=print_md, action="store_true", help="Print a markdown table after test results are complete.")
   args = parser.parse_args()
   test_duration = int(args.duration)
-
+  print_md = bool(args.print_md)
+  
   try:
     main()
   except Exception as e:
