@@ -4,13 +4,24 @@ import util
 
 client_dir = util.base_path / "client"
 
-class NodeWispClient:
+class BaseWispClient:
+  def __init__(self, streams, instances=1):
+    self.streams = streams
+    self.instances = instances
+    if instances == 1:
+      self.name = f"{self.name} ({streams})"
+    else:
+      self.name = f"{self.name} ({instances}x{streams})"
+  
+  def run(self, *args, **kwargs):
+    jobs = []
+    for i in range(self.instances):
+      jobs.append(self.run_once(*args, **kwargs))
+    return jobs
+
+class NodeWispClient(BaseWispClient):
   name = "wisp-js"
   path = client_dir / "js"
-
-  def __init__(self, streams):
-    self.streams = streams
-    self.name = f"{self.name} ({streams})"
 
   def install(self):
     mkdir -p @(self.path)
@@ -20,20 +31,15 @@ class NodeWispClient:
   def is_installed(self):
     return (self.path / "node_modules").exists()
   
-  def run(self, server_port, target_port, log):
+  def run_once(self, server_port, target_port, log):
     with util.temp_cd(self.path):
       node client.mjs @(server_port) @(target_port) @(self.streams) 2>&1 >@(log) &
       return util.last_job()
 
-
-class RustWispClient:
+class RustWispClient(BaseWispClient):
   name = "wisp-mux"
   path = client_dir / "rust"
   src_dir = path / "simple-wisp-client"
-
-  def __init__(self, streams):
-    self.streams = streams
-    self.name = f"{self.name} ({streams})"
 
   def install(self):
     if not self.path.exists():
@@ -44,7 +50,7 @@ class RustWispClient:
   def is_installed(self):
     return (self.path / "target" / "release" / "simple-wisp-client").exists()
   
-  def run(self, server_port, target_port, log):
+  def run_once(self, server_port, target_port, log):
     with util.temp_cd(self.src_dir):
       @(self.path / "target" / "release" / "simple-wisp-client") -w ws://127.0.0.1:@(server_port)/ -t 127.0.0.1:@(target_port) -s @(self.streams) -p 50 2>&1 >@(log) &
       return util.last_job()
@@ -52,6 +58,8 @@ class RustWispClient:
 implementations = [
   NodeWispClient(1),
   NodeWispClient(10),
+  NodeWispClient(10, 5),
   RustWispClient(1),
   RustWispClient(10),
+  RustWispClient(10, 5)
 ]

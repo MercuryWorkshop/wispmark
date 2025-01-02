@@ -145,7 +145,6 @@ implementations = [
   NodeWispServer(),
   JSWispServer(),
   PythonWispServer("python3"),
-#  PythonWispServer("pypy3"),
   RustWispServer("singlethread"),
   RustWispServer("multithread"),
   RustWispServer("multithreadalt"),

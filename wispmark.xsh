@@ -94,7 +94,7 @@ def main():
         wait_for_server()
 
         print("running client and recording speeds...")
-        client_job = client_impl.run(wisp_port, echo_port, client_log_file)
+        client_jobs = client_impl.run(wisp_port, echo_port, client_log_file)
 
         time.sleep(1)
         speed = util.measure_bandwidth(echo_port, test_duration)
@@ -107,7 +107,7 @@ def main():
         result = "DNF"
 
       table[-1].append(result)
-      util.kill_job(server_job, client_job)
+      util.kill_job(server_job, *client_jobs)
 
   util.kill_job(echo_process)
 
@@ -133,9 +133,7 @@ def main():
   print(table_str)
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(
-    description=f"A benchmarking tool for Wisp protocol implementations."
-  )
+  parser = argparse.ArgumentParser(description=f"A benchmarking tool for Wisp protocol implementations.")
   parser.add_argument("--duration", default=test_duration, help=f"The duration of each test, in seconds. The default is {test_duration}s.")
   args = parser.parse_args()
   test_duration = int(args.duration)
@@ -144,4 +142,4 @@ if __name__ == "__main__":
     main()
   except Exception as e:
     traceback.print_exc() 
-    utils.xonsh_jobs.hup_all_jobs()
+    util.xonsh_jobs.hup_all_jobs()
