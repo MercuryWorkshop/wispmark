@@ -115,6 +115,7 @@ def main():
       print(f"testing {server_impl.name} with {client_impl.name}")
       server_log_file = log_dir / f"SERVER_{server_impl.name}_{client_impl.name}.log"
       client_log_file = log_dir / f"CLIENT_{server_impl.name}_{client_impl.name}.log"
+      client_jobs = []
       
       try:
         print("starting server")

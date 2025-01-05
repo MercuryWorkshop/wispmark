@@ -7,10 +7,9 @@ To run this repository, install the Xonsh shell, and all the dependencies for th
 
 You need:
 - Git
-- CPython and PyPy
+- CPython
 - NodeJS
 - Rust Nightly
-- Crystal
 - GCC
 - iftop
 
@@ -49,6 +48,23 @@ options:
 
 ## Current Results:
 Note that test results can vary wildly across different CPUs.
+
+```
+CPU: AMD Ryzen 9 5950X 16-Core Processor (x32)
+Test duration: 20s
+```
+
+|                                | wisp-js (1)  | wisp-js (10)  | wisp-js (5x10) | wisp-mux (1)  | wisp-mux (10) | wisp-mux (5x10) |
+|--------------------------------|--------------|---------------|----------------|---------------|---------------|-----------------|
+| wisp-server-node               | 866.99 MiB/s | 899.22 MiB/s  | 893.08 MiB/s   | 994.36 MiB/s  | 914.44 MiB/s  | 852.16 MiB/s    |
+| wisp-js                        | 897.63 MiB/s | 863.73 MiB/s  | 840.72 MiB/s   | 827.89 MiB/s  | 867.36 MiB/s  | 806.35 MiB/s    |
+| wisp-server-python (async)     | 822.23 MiB/s | 1116.89 MiB/s | 1094.61 MiB/s  | 806.82 MiB/s  | 836.97 MiB/s  | 878.19 MiB/s    |
+| wisp-server-python (threading) | 858.79 MiB/s | 1625.19 MiB/s | 1233.25 MiB/s  | 1370.99 MiB/s | 1459.59 MiB/s | 1188.31 MiB/s   |
+| epoxy-server (singlethread)    | 862.62 MiB/s | 1573.99 MiB/s | 1807.34 MiB/s  | 1336.33 MiB/s | 2058.44 MiB/s | 2012.19 MiB/s   |
+| epoxy-server (multithread)     | 863.68 MiB/s | 1461.22 MiB/s | 2655.04 MiB/s  | 1289.78 MiB/s | 2135.07 MiB/s | 4352.95 MiB/s   |
+| WispServerCpp                  | 300.19 MiB/s | 1050.39 MiB/s | 2559.79 MiB/s  | 279.99 MiB/s  | 252.17 MiB/s  | 1288.47 MiB/s   |
+
+<hr>
 
 ```
 CPU: AMD EPYC 7763 64-Core Processor (x4)
