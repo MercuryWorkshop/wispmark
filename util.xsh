@@ -61,3 +61,26 @@ def temp_cd(path):
     yield
   finally:
     os.chdir(original_path)
+
+def is_wsl():
+  binfmt_path = p"/proc/sys/fs/binfmt_misc/"
+  return bool(list(binfmt_path.rglob("WSL*")))
+
+def get_cpu():
+  if is_wsl():
+    powershell_cmd = "Get-CimInstance -ClassName Win32_Processor | Select-Object -ExpandProperty Name"
+    powershell_path = "/mnt/c/Windows/System32/WindowsPowershell/v1.0/powershell.exe" 
+    cpu_name = $(@(powershell_path) -command @(powershell_cmd)).strip()
+
+  else:
+    cpu_regex = r'model name.+?: (.+?)\n'
+    cpu_names = re.findall(cpu_regex, p"/proc/cpuinfo".read_text())
+    if len(cpu_names) == 0:
+      cpu_arch = $(uname -m).strip()
+      cpu_name = f"Unknown {cpu_arch} CPU"
+    else:
+      cpu_name = cpu_names[0]
+
+  count_regex = r'processor.+?: (.+?)\n'
+  cpu_count = len(re.findall(count_regex, p"/proc/cpuinfo".read_text()))
+  return f"{cpu_name} (x{cpu_count})"

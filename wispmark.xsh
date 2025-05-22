@@ -33,11 +33,11 @@ def install_echo():
     return
   git clone "https://github.com/tokio-rs/tokio" @(echo_repo)
   with util.temp_cd(echo_repo):
-    cargo build --release --example echo
+    cargo build --release --example echo-tcp
 
 def run_echo():
   with util.temp_cd(echo_repo):
-    cargo run --release --example echo 127.0.0.1:@(echo_port) 2>&1 >/dev/null &
+    cargo run --release --example echo-tcp 127.0.0.1:@(echo_port) 2>&1 >/dev/null &
     return util.last_job()
 
 def wait_for_server():
@@ -143,9 +143,7 @@ def main():
 
   #print out our results
   print("WispMark has finshed.\n\n")
-  cpu_regex = r'model name.+?: (.+?)\n'
-  cpu_names = re.findall(cpu_regex, p"/proc/cpuinfo".read_text())
-  print(f"CPU: {cpu_names[0]} (x{len(cpu_names)})")
+  print(f"CPU: {util.get_cpu()}")
   print(f"Test duration: {test_duration}s")
 
   print_table(table, print_md)

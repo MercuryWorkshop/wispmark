@@ -12,6 +12,7 @@ You need:
 - Rust Nightly
 - GCC
 - iftop
+- net-tools
 
 You must also be on a recent Linux distribution. Debian 12 and Arch Linux have been tested to work.
 
