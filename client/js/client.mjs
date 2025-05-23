@@ -7,7 +7,7 @@ let stream_count = parseInt(process.argv[4]);
 
 let ws_url = `ws://127.0.0.1:${server_port}/`;
 let payload = new TextEncoder().encode("a".repeat(1024 * 50));
-let max_buffered = 50 * 1024 * 1024;
+let max_buffered = 5 * 1024 * 1024;
 
 console.log(`connecting to ${ws_url}`)
 let conn = new ClientConnection(ws_url);
@@ -17,7 +17,7 @@ conn.onopen = () => {
     let stream = conn.create_stream("127.0.0.1", target_port);
     
     setInterval(() => {
-      if (stream.send_buffer.length < 100 && conn.ws.bufferedAmount < max_buffered) {
+      if (stream.send_buffer.length < 20 && conn.ws.bufferedAmount < max_buffered) {
         for (let j = 0; j < 10; j++) {
           stream.send(payload);
         }

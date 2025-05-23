@@ -93,40 +93,6 @@ class RustWispServer:
       @(self.path / "target" / "release" / "epoxy-server") config.toml >@(log) &
       return util.last_job()
 
-class CPPWispServer:
-  name = "WispServerCpp"
-  path = server_dir / "cpp"
-  git_repo = path / name
-  lib_repo = path / "uWebSockets"
-  prefix = path / "prefix"
-
-  def install(self):
-    core_count = $(nproc --all).strip()
-    if not self.git_repo.exists():
-      git clone "https://github.com/FoxMoss/WispServerCpp" @(self.git_repo) -b bleeding
-    if not self.lib_repo.exists():
-      git clone "https://github.com/uNetworking/uWebSockets" @(self.lib_repo) --recurse-submodules --shallow-submodules -b v20.64.0
-    if not (self.prefix / "lib" / "libusockets.a").exists():
-      with util.temp_cd(self.lib_repo):
-        mkdir -p @(self.prefix)/lib
-        mkdir -p @(self.prefix)/include
-        make examples -j@(core_count)
-        make DESTDIR=@(self.prefix) prefix= install
-        cp ./uSockets/uSockets.a @(self.prefix)/lib/libusockets.a
-        cp ./uSockets/src/*.h @(self.prefix)/include/
-    with util.temp_cd(self.git_repo):
-      #why is the L not capitalized?
-      mkdir -p obj
-      make all FlAGS=@(f"-Ofast -L{self.prefix / 'lib'} -I{self.prefix / 'include'} -march=native") -j@(core_count)
-      
-  def is_installed(self):
-    return (self.git_repo / "wispserver").exists()
-  
-  def run(self, port, log):
-    with util.temp_cd(self.git_repo):
-      ./wispserver @(port) 2>&1 >@(log) &
-      return util.last_job()
-
 class CustomWispServer:
   def __init__(self, name, path):
     self.name = name
@@ -148,7 +114,6 @@ implementations = [
   PythonWispServer(),
   RustWispServer("singlethread"),
   RustWispServer("multithread"),
-  #RustWispServer("multithreadalt"),
-  CPPWispServer()
+  #RustWispServer("multithreadalt")
 ]
 

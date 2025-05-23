@@ -29,7 +29,6 @@ Server:
 - [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/server)
 - [wisp-server-python](https://github.com/MercuryWorkshop/wisp-server-python)
 - [epoxy-server](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/server)
-- [WispServerCpp](https://github.com/FoxMoss/WispServerCpp)
 
 Client:
 - [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/client)
