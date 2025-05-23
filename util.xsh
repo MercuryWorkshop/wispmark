@@ -37,7 +37,7 @@ def kill_by_port(target_port):
   for port, pid in re.findall(process_regex, netstat_out):
     if int(port) == target_port:
       try:
-        kill @(pid)
+        kill -s SIGTERM @(pid)
       except subprocess.CalledProcessError:
         pass
 

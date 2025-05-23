@@ -44,15 +44,11 @@ class PythonWispServer:
   path = server_dir / "python"
   git_repo = path / name
 
-  def __init__(self, variant, python="python3"):
+  def __init__(self, python="python3"):
     self.python = python
-    self.name = f"{self.name} ({variant})"
+    if self.python != "python3":
+      self.name = f"{self.name} ({self.python})"
     self.venv = self.path / f".venv_{python}"
-    packages = {
-      "async": "wisp.server",
-      "threading": "wisp.server.threading"
-    }
-    self.main = packages[variant]
 
   def install(self):
     mkdir -p @(self.path)
@@ -68,7 +64,7 @@ class PythonWispServer:
   
   def run(self, port, log):
     with util.temp_cd(self.git_repo):
-      bash -c @(f"source {self.venv}/bin/activate; {self.python} -m {self.main} --port={port} --allow-loopback 2>&1 >'{log}'") &
+      bash -c @(f"source {self.venv}/bin/activate; {self.python} -m wisp.server --port={port} --allow-loopback 2>&1 >'{log}'") &
       return util.last_job()
 
 
@@ -149,11 +145,10 @@ class CustomWispServer:
 implementations = [
   NodeWispServer(),
   JSWispServer(),
-  PythonWispServer("async"),
-  PythonWispServer("threading"),
+  PythonWispServer(),
   RustWispServer("singlethread"),
   RustWispServer("multithread"),
-# RustWispServer("multithreadalt"),
+  #RustWispServer("multithreadalt"),
   CPPWispServer()
 ]
 

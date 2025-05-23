@@ -120,6 +120,7 @@ def main():
       try:
         print("starting server")
         util.kill_by_port(wisp_port)
+        time.sleep(1)
         server_job = server_impl.run(wisp_port, server_log_file)
         wait_for_server()
 

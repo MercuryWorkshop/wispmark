@@ -56,10 +56,10 @@ class RustWispClient(BaseWispClient):
       return util.last_job()
 
 implementations = [
-  NodeWispClient(1),
   NodeWispClient(10),
   NodeWispClient(10, 5),
-  RustWispClient(1),
+  #NodeWispClient(10, 10),
   RustWispClient(10),
-  RustWispClient(10, 5)
+  RustWispClient(10, 5),
+  #RustWispClient(10, 10),
 ]
