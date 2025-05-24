@@ -13,6 +13,7 @@ You need:
 - GCC
 - iftop
 - net-tools
+- Go
 
 You must also be on a recent Linux distribution. Debian 12 and Arch Linux have been tested to work.
 
@@ -29,6 +30,7 @@ Server:
 - [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/server)
 - [wisp-server-python](https://github.com/MercuryWorkshop/wisp-server-python)
 - [epoxy-server](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/server)
+- [go-wisp](https://github.com/TheFalloutOf76/go-wisp)
 
 Client:
 - [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/client)
