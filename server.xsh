@@ -1,5 +1,7 @@
 #!/usr/bin/env xonsh
 
+import json
+
 import util
 
 server_dir = util.base_path / "server"
@@ -93,6 +95,43 @@ class RustWispServer:
       @(self.path / "target" / "release" / "epoxy-server") config.toml >@(log) &
       return util.last_job()
 
+class GoWispServer:
+  name = "go-wisp"
+  path = server_dir / "go"
+
+  def install(self):
+    if not self.path.exists():
+      git clone "https://github.com/TheFalloutOf76/go-wisp" @(self.path)
+    with util.temp_cd(self.path):
+      go get .
+      go build -ldflags "-s -w" -o "go-wisp" main.go
+
+  def is_installed(self):
+    return (self.path / "go-wisp").exists()
+  
+  def run(self, port, log):
+    config_content = json.dumps({
+      "port": port,
+      "disableUDP": True,
+      "tcpBufferSize": 131072,
+      "bufferRemainingLength": 256,
+      "tcpNoDelay": False,
+      "websocketTcpNoDelay": False,
+      "blacklist": {
+          "hostnames": []
+      },
+      "whitelist": {
+          "hostnames": []
+      },
+      "proxy": "",
+      "websocketPermessageDeflate": False,
+      "dnsServer": ""
+    })
+    with util.temp_cd(self.path):
+      echo @(config_content) > config.json
+      ./go-wisp 2>&1 >@(log) &
+      return util.last_job()
+
 class CustomWispServer:
   def __init__(self, name, path):
     self.name = name
@@ -114,6 +153,7 @@ implementations = [
   PythonWispServer(),
   RustWispServer("singlethread"),
   RustWispServer("multithread"),
-  #RustWispServer("multithreadalt")
+  #RustWispServer("multithreadalt"),
+  GoWispServer(),
 ]
 

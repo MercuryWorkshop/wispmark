@@ -5,6 +5,7 @@
 /server/python
 /server/rust
 /server/cpp
+/server/go
 /client/crystal/git
 /client/crystal/demo
 /client/rust
