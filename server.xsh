@@ -1,5 +1,7 @@
 #!/usr/bin/env xonsh
 
+import json
+
 import util
 
 server_dir = util.base_path / "server"
@@ -108,23 +110,23 @@ class GoWispServer:
     return (self.path / "go-wisp").exists()
   
   def run(self, port, log):
-    config_content = f"""{{
-        "port": "{port}",
-        "disableUDP": true,
-        "tcpBufferSize": 131072,
-        "bufferRemainingLength": 256,
-        "tcpNoDelay": false,
-        "websocketTcpNoDelay": false,
-        "blacklist": {{
-            "hostnames": []
-        }},
-        "whitelist": {{
-            "hostnames": []
-        }},
-        "proxy": "",
-        "websocketPermessageDeflate": false,
-        "dnsServer": ""
-    }}"""
+    config_content = json.dumps({
+      "port": port,
+      "disableUDP": True,
+      "tcpBufferSize": 131072,
+      "bufferRemainingLength": 256,
+      "tcpNoDelay": False,
+      "websocketTcpNoDelay": False,
+      "blacklist": {
+          "hostnames": []
+      },
+      "whitelist": {
+          "hostnames": []
+      },
+      "proxy": "",
+      "websocketPermessageDeflate": False,
+      "dnsServer": ""
+    })
     with util.temp_cd(self.path):
       echo @(config_content) > config.json
       ./go-wisp 2>&1 >@(log) &
