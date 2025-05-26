@@ -110,8 +110,8 @@ class GoWispServer:
     return (self.path / "go-wisp").exists()
   
   def run(self, port, log):
-    config_content = json.dumps({
-      "port": port,
+    config = {
+      "port": str(port),
       "disableUDP": True,
       "tcpBufferSize": 131072,
       "bufferRemainingLength": 256,
@@ -126,9 +126,13 @@ class GoWispServer:
       "proxy": "",
       "websocketPermessageDeflate": False,
       "dnsServer": ""
-    })
+    }
+
+    config_content = json.dumps(config)
+    config_path = self.path / "config.json"
+    config_path.write_text(config_content)
+    
     with util.temp_cd(self.path):
-      echo @(config_content) > config.json
       ./go-wisp 2>&1 >@(log) &
       return util.last_job()
 
