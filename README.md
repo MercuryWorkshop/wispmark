@@ -15,11 +15,11 @@ You need:
 - net-tools
 - Go
 
-You must also be on a recent Linux distribution. Debian 12 and Arch Linux have been tested to work.
+You must also be on a recent Linux distribution. Debian 13 and Arch Linux have been tested to work.
 
-Run ./wispmark.xsh to start the tests. If you don't already have Xonsh installed, run `./wispmark.sh` which is a wrapper that will install Xonsh in a Python virtual environment.
+Run `./wispmark.xsh` to start the tests. If you don't already have Xonsh installed, run `./wispmark.sh` which is a wrapper that will install Xonsh in a Python virtual environment.
 
-Note: if you want to rebuild all of the server and client implementations to run a clean test, you can run: `git clean -ffXd`
+Note: If you want to rebuild all of the server and client implementations to run a clean test, you can run: `git clean -ffXd`
 
 ## Methodology:
 This program pairs each Wisp server with each Wisp client, with a TCP echo server running on port 6002. The amount of traffic passing through that port is used to calculate the bandwidth that was achieved with each configuration. 
@@ -56,6 +56,25 @@ CPU: AMD Ryzen 9 5950X 16-Core Processor (x32)
 Test duration: 20s
 ```
 
+|                             | wisp-js (10)  | wisp-js (5x10) | wisp-mux (10) | wisp-mux (5x10) |
+|-----------------------------|---------------|----------------|---------------|-----------------|
+| wisp-server-node            | 1131.25 MiB/s | 1085.71 MiB/s  | 1223.59 MiB/s | 1208.65 MiB/s   |
+| wisp-js                     | 1287.54 MiB/s | 1128.26 MiB/s  | 1397.44 MiB/s | 1326.38 MiB/s   |
+| wisp-server-python          | 1229.35 MiB/s | 2012.76 MiB/s  | 1000.48 MiB/s | 4676.45 MiB/s   |
+| epoxy-server (singlethread) | 1653.19 MiB/s | 1465.92 MiB/s  | 1643.67 MiB/s | 1514.6 MiB/s    |
+| epoxy-server (multithread)  | 1513.66 MiB/s | 2174.03 MiB/s  | 1418.53 MiB/s | 4141.68 MiB/s   |
+| go-wisp                     | 1589.08 MiB/s | 1771.7 MiB/s   | 2390.55 MiB/s | 3395.65 MiB/s   |
+
+
+## Old Results:
+
+### From January 2025:
+
+```
+CPU: AMD Ryzen 9 5950X 16-Core Processor (x32)
+Test duration: 20s
+```
+
 |                                | wisp-js (1)  | wisp-js (10)  | wisp-js (5x10) | wisp-mux (1)  | wisp-mux (10) | wisp-mux (5x10) |
 |--------------------------------|--------------|---------------|----------------|---------------|---------------|-----------------|
 | wisp-server-node               | 866.99 MiB/s | 899.22 MiB/s  | 893.08 MiB/s   | 994.36 MiB/s  | 914.44 MiB/s  | 852.16 MiB/s    |
@@ -82,10 +101,7 @@ Test duration: 30s
 | epoxy-server (multithreadalt) | 565.13 MiB/s | 707.72 MiB/s | 793.26 MiB/s   | 561.48 MiB/s | 942.28 MiB/s  | 981.91 MiB/s    |
 | WispServerCpp                 | 228.59 MiB/s | 453.17 MiB/s | 559.58 MiB/s   | 126.3 MiB/s  | DNF           | 274.52 MiB/s    |
 
-
-### Old Results:
-
-From September 2024:
+### From September 2024:
 ```
 CPU: AMD EPYC 7763 64-Core Processor (x4)
 Test duration: 30s

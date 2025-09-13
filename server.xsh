@@ -66,7 +66,7 @@ class PythonWispServer:
   
   def run(self, port, log):
     with util.temp_cd(self.git_repo):
-      bash -c @(f"source {self.venv}/bin/activate; {self.python} -m wisp.server --port={port} --allow-loopback 2>&1 >'{log}'") &
+      bash -c @(f"source {self.venv}/bin/activate; python3 -m wisp.server --port={port} --allow-loopback 2>&1 >'{log}'") &
       return util.last_job()
 
 
@@ -83,7 +83,6 @@ class RustWispServer:
     if not self.path.exists():
       git clone "https://github.com/MercuryWorkshop/epoxy-tls" @(self.path)
     with util.temp_cd(self.src_dir):
-      $RUSTFLAGS="--cfg tokio_unstable"
       cargo build --release
 
   def is_installed(self):
@@ -157,7 +156,6 @@ implementations = [
   PythonWispServer(),
   RustWispServer("singlethread"),
   RustWispServer("multithread"),
-  #RustWispServer("multithreadalt"),
   GoWispServer(),
 ]
 
