@@ -26,14 +26,13 @@ This program pairs each Wisp server with each Wisp client, with a TCP echo serve
 
 ### Implementations Tested:
 Server:
-- [wisp-server-node](https://github.com/MercuryWorkshop/wisp-server-node)
-- [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/server)
 - [wisp-server-python](https://github.com/MercuryWorkshop/wisp-server-python)
+- [wisp-js/server](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/server)
 - [epoxy-server](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/server)
 - [go-wisp](https://github.com/TheFalloutOf76/go-wisp)
 
 Client:
-- [wisp-js](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/client)
+- [wisp-js/client](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/client)
 - [wisp-mux](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/simple-wisp-client)
 
 ## Usage:
@@ -161,7 +160,7 @@ This program is licensed under the GNU GPL v3.
 
 ```
 WispMark: A benchmarking tool for Wisp protocol implementations.
-Copyright (C) 2024 ading2210
+Copyright (C) 2025 ading2210
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
