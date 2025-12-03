@@ -7,12 +7,12 @@ To run this repository, install the Xonsh shell, and all the dependencies for th
 
 You need:
 - Git
-- CPython
-- NodeJS
-- Rust Nightly
-- GCC
 - iftop
 - net-tools
+- NodeJS
+- CPython
+- Rust Nightly
+- GCC
 - Go
 
 You must also be on a recent Linux distribution. Debian 13 and Arch Linux have been tested to work.

@@ -8,6 +8,7 @@ import traceback
 import time
 import re
 import requests
+import textwrap
 import argparse
 import xonsh
 
@@ -23,6 +24,7 @@ echo_port = 6002
 server_timeout = 5
 test_duration = 10
 print_md = False
+output_file = "wispmark-results.md"
 
 echo_dir = util.base_path / "echo"
 echo_repo = echo_dir / "tokio"
@@ -62,7 +64,7 @@ def wait_for_socket():
   else:
     raise RuntimeError("Echo server failed to start in time.")
 
-def print_table(table, print_md):
+def get_table(table, print_md):
   corner_separator = "-|-" if print_md else "-+-"
   col_widths = []
   for x, col in enumerate(table[0]):
@@ -88,7 +90,7 @@ def print_table(table, print_md):
   else:
     table_str = f"\n{row_separator}\n".join(rows)
 
-  print(table_str)
+  return table_str
 
 def main():
   sudo true
@@ -142,20 +144,29 @@ def main():
 
   util.kill_job(echo_process)
 
-  #print out our results
-  print("WispMark has finshed.\n\n")
-  print(f"CPU: {util.get_cpu()}")
-  print(f"Test duration: {test_duration}s")
+  print("WispMark has finshed.")
+  starter = textwrap.dedent(f"""
+  CPU: {util.get_cpu()}
+  Test duration: {test_duration}s
+  """)
+  print(starter)
+  print(get_table(table, print_md))
+  with open(output_file, "w") as file:
+    file.write(starter + "\n")
+    file.write(get_table(table, True))
 
-  print_table(table, print_md)
+
+
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=f"A benchmarking tool for Wisp protocol implementations.")
   parser.add_argument("--duration", default=test_duration, help=f"The duration of each test, in seconds. The default is {test_duration}s.")
   parser.add_argument("--print-md", default=print_md, action="store_true", help="Print a markdown table after test results are complete.")
+  parser.add_argument("--output", default=output_file, help=f"The file to use for output after test results are complete. The default is {output_file}.")
   args = parser.parse_args()
   test_duration = int(args.duration)
   print_md = bool(args.print_md)
+  output_file = str(args.output)
   
   try:
     main()
