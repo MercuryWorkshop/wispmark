@@ -152,7 +152,7 @@ def main():
   print(starter)
   print(get_table(table, print_md))
   with open(output_file, "w") as file:
-    file.write(starter + "\n")
+    file.write("```" + starter + "```" + "\n")
     file.write(get_table(table, True))
 
 
