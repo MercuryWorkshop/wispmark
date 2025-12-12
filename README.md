@@ -27,23 +27,24 @@ This program pairs each Wisp server with each Wisp client, with a TCP echo serve
 ### Implementations Tested:
 Server:
 - [wisp-server-python](https://github.com/MercuryWorkshop/wisp-server-python)
-- [wisp-js/server](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/server)
+- [wisp-js/server](https://github.com/MercuryWorkshop/wisp-js/blob/master/src/server)
 - [epoxy-server](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/server)
 - [go-wisp](https://github.com/TheFalloutOf76/go-wisp)
 
 Client:
-- [wisp-js/client](https://github.com/MercuryWorkshop/wisp-client-js/blob/rewrite/src/client)
+- [wisp-js/client](https://github.com/MercuryWorkshop/wisp-js/blob/master/src/client)
 - [wisp-mux](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/simple-wisp-client)
 
 ## Usage:
 ```
-usage: wispmark.xsh [-h] [--duration DURATION] [--print-md]
+usage: wispmark.xsh [-h] [--duration DURATION] [--output OUTPUT] [--print-md]
 
 A benchmarking tool for Wisp protocol implementations.
 
 options:
   -h, --help           show this help message and exit
   --duration DURATION  The duration of each test, in seconds. The default is 10s.
+  --output OUTPUT      The file to use for output after test results are complete. The default is wispmark-results.md.
   --print-md           Print a markdown table after test results are complete.
 ```
 

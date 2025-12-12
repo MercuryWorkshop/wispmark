@@ -161,8 +161,8 @@ def main():
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=f"A benchmarking tool for Wisp protocol implementations.")
   parser.add_argument("--duration", default=test_duration, help=f"The duration of each test, in seconds. The default is {test_duration}s.")
-  parser.add_argument("--print-md", default=print_md, action="store_true", help="Print a markdown table after test results are complete.")
   parser.add_argument("--output", default=output_file, help=f"The file to use for output after test results are complete. The default is {output_file}.")
+  parser.add_argument("--print-md", default=print_md, action="store_true", help="Print a markdown table after test results are complete.")
   args = parser.parse_args()
   test_duration = int(args.duration)
   print_md = bool(args.print_md)
