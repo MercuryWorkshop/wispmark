@@ -77,18 +77,18 @@ class RustWispServer:
       return util.last_job()
 
 class GoWispServer:
-  name = "go-wisp"
+  name = "mrrowisp"
   path = server_dir / "go"
 
   def install(self):
     if not self.path.exists():
-      git clone "https://github.com/TheFalloutOf76/go-wisp" @(self.path)
+      git clone "https://github.com/starlightdevgroup/mrrowisp" @(self.path)
     with util.temp_cd(self.path):
       go get .
-      go build -ldflags "-s -w" -o "go-wisp" main.go
+      go build -o mrrowisp
 
   def is_installed(self):
-    return (self.path / "go-wisp").exists()
+    return (self.path / "mrrowisp" / "mrrowisp").exists()
   
   def run(self, port, log):
     config = {
@@ -96,8 +96,8 @@ class GoWispServer:
       "disableUDP": True,
       "tcpBufferSize": 131072,
       "bufferRemainingLength": 256,
-      "tcpNoDelay": False,
-      "websocketTcpNoDelay": False,
+      "tcpNoDelay": True,
+      "websocketTcpNoDelay": True,
       "blacklist": {
           "hostnames": []
       },
@@ -106,7 +106,16 @@ class GoWispServer:
       },
       "proxy": "",
       "websocketPermessageDeflate": False,
-      "dnsServer": ""
+      "dnsServer": "",
+      "enableV2": True,
+      "motd": "",
+      "passwordAuth": False,
+      "passwordAuthRequired": False,
+      "passwordUsers": {},
+      "certAuth": False,
+      "certAuthRequired": False,
+      "certAuthPublicKeys": [],
+      "enableStreamConfirm": False
     }
 
     config_content = json.dumps(config)
@@ -114,7 +123,7 @@ class GoWispServer:
     config_path.write_text(config_content)
     
     with util.temp_cd(self.path):
-      ./go-wisp 2>&1 >@(log) &
+      ./mrrowisp 2>&1 >@(log) &
       return util.last_job()
 
 class CustomWispServer:

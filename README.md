@@ -28,12 +28,12 @@ This program pairs each Wisp server with each Wisp client, with a TCP echo serve
 Server:
 - [wisp-server-python](https://github.com/MercuryWorkshop/wisp-server-python)
 - [wisp-js/server](https://github.com/MercuryWorkshop/wisp-js/blob/master/src/server)
-- [epoxy-server](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/server)
-- [go-wisp](https://github.com/TheFalloutOf76/go-wisp)
+- [epoxy-server](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/server) (Rust)
+- [mrrowisp](https://github.com/starlightdevgroup/mrrowisp) (Go)
 
 Client:
 - [wisp-js/client](https://github.com/MercuryWorkshop/wisp-js/blob/master/src/client)
-- [wisp-mux](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/simple-wisp-client)
+- [wisp-mux](https://github.com/MercuryWorkshop/epoxy-tls/tree/multiplexed/simple-wisp-client) (Rust)
 
 ## Usage:
 ```
