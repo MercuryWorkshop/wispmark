@@ -3,7 +3,7 @@
 WispMark is a benchmarking tool for Wisp protocol implementations.
 
 ## Installation:
-To run this repository, install the Xonsh shell, and all the dependencies for the Wisp implementations. 
+To run this repository, install all the dependencies for the Wisp implementations. 
 
 You need:
 - Git
@@ -17,7 +17,7 @@ You need:
 
 You must also be on a recent Linux distribution. Debian 13 and Arch Linux have been tested to work.
 
-Run `./wispmark.xsh` to start the tests. If you don't already have Xonsh installed, run `./wispmark.sh` which is a wrapper that will install Xonsh in a Python virtual environment.
+Run `python3 ./wispmark.py` to start the tests. If you don't have a proper pip environment with requests installed, run `./wispmark.sh` which is a wrapper that will install requests in a Python virtual environment.
 
 Note: If you want to rebuild all of the server and client implementations to run a clean test, you can run: `git clean -ffXd`
 
