@@ -5,8 +5,8 @@ if [ ! -d ".venv" ]; then
   source .venv/bin/activate
 fi
 
-if ! python3 -c "import xonsh, requests" 2> /dev/null; then
+if ! python3 -c "import requests" 2> /dev/null; then
   pip3 install -r requirements.txt
 fi
 
-xonsh ./wispmark.xsh "$@"
+python3 ./wispmark.py "$@"
